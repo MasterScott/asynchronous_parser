@@ -10,15 +10,26 @@ def setup_download_dir():
 	if not download_dir.exists():
 		download_dir.mkdir()
 	return download_dir
-setup_download_dir()
 
 def get_links():
+	count = 0
+	num_lines = sum(1 for line in open(sys.argv[1]))
 	with open(sys.argv[1]) as openedfile:
 		for line in openedfile:
-			filename = ''.join(line.rstrip("\n").split('/')[-1:])
-			print("[%s] Downloading %s -> %s", filename, line)
-			urllib.request.urlretrieve(line, filename)
+			url = ''.join(line.rstrip(" \n"))
+			filename = url.split('/')[-1]
+			print("Download %s of %s" % (count, num_lines))
+			urllib.request.urlretrieve(url, 'Downloaded/'+filename)
+			count+=1
 	openedfile.close()
 
-setup_download_dir()
-get_links()
+
+
+def main():
+	setup_download_dir()
+	get_links()
+
+
+
+if __name__ == '__main__':
+	main()
